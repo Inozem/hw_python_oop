@@ -1,28 +1,29 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from typing import Dict, Type
 
 
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
+
     training_type: str
     duration: float
     distance: float
     speed: float
     calories: float
+    OUTPUT_MESSAGE = ('Тип тренировки: {training_type}; '
+                   'Длительность: {duration:.3f} ч.; '
+                   'Дистанция: {distance:.3f} км; '
+                   'Ср. скорость: {speed:.3f} км/ч; '
+                   'Потрачено ккал: {calories:.3f}.')
 
     def get_message(self) -> str:
-        text_training_type = 'Тип тренировки: {training_type}; '
-        text_duration = 'Длительность: {duration:.3f} ч.; '
-        text_distance = 'Дистанция: {distance:.3f} км; '
-        text_speed = 'Ср. скорость: {speed:.3f} км/ч; '
-        text_calories = 'Потрачено ккал: {calories:.3f}.'
-        return (text_training_type + text_duration + text_distance
-                + text_speed + text_calories).format(**asdict(self))
+        return self.OUTPUT_MESSAGE.format(**asdict(self))
 
 
 class Training:
     """Базовый класс тренировки."""
+    
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
     H_IN_M: int = 60
@@ -60,6 +61,7 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
+
     CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
     CALORIES_MEAN_SPEED_DEDUCTIBLE: int = 20
 
@@ -73,6 +75,7 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
+
     CALORIES_WEIGHT_MULTIPLIER: float = 0.035
     CALORIES_MEAN_SPEED_MULTIPLIER: float = 0.029
 
@@ -94,6 +97,7 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
+
     LEN_STEP: float = 1.38
     CALORIES_MEAN_SPEED_TERM: float = 1.1
     CALORIES_WEIGHT_MULTIPLIER: int = 2
@@ -121,15 +125,15 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    dict_training: Dict[str, Type[Training]] = {'SWM': Swimming,
+    activity_types: Dict[str, Type[Training]] = {'SWM': Swimming,
                                                 'RUN': Running,
                                                 'WLK': SportsWalking}
 
     try:
-        sport_res = dict_training[workout_type](*data)
+        sport_res = activity_types[workout_type](*data)
         return sport_res
     except KeyError:
-        raise KeyError(f'{workout_type} is not in dict_training')
+        raise KeyError(f'{workout_type} is not in activity_types')
 
 
 def main(training: Training) -> None:
