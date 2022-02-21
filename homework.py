@@ -1,6 +1,7 @@
 from dataclasses import dataclass, asdict
 from typing import Dict, Type
 
+
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -18,6 +19,7 @@ class InfoMessage:
         text_calories = 'Потрачено ккал: {calories:.3f}.'
         return (text_training_type + text_duration + text_distance
                 + text_speed + text_calories).format(**asdict(self))
+
 
 class Training:
     """Базовый класс тренировки."""
@@ -65,7 +67,8 @@ class Running(Training):
         """Получить количество затраченных калорий."""
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
                 - self.CALORIES_MEAN_SPEED_DEDUCTIBLE)
-                * self.weight_kg / self.M_IN_KM * self.duration_h * self.H_IN_M)
+                * self.weight_kg / self.M_IN_KM * self.duration_h
+                * self.H_IN_M)
 
 
 class SportsWalking(Training):
@@ -125,7 +128,7 @@ def read_package(workout_type: str, data: list) -> Training:
     try:
         sport_res = dict_training[workout_type](*data)
         return sport_res
-    except:
+    except KeyError:
         raise KeyError(f'{workout_type} is not in dict_training')
 
 
