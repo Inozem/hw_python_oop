@@ -12,10 +12,10 @@ class InfoMessage:
     speed: float
     calories: float
     OUTPUT_MESSAGE = ('Тип тренировки: {training_type}; '
-                   'Длительность: {duration:.3f} ч.; '
-                   'Дистанция: {distance:.3f} км; '
-                   'Ср. скорость: {speed:.3f} км/ч; '
-                   'Потрачено ккал: {calories:.3f}.')
+                      'Длительность: {duration:.3f} ч.; '
+                      'Дистанция: {distance:.3f} км; '
+                      'Ср. скорость: {speed:.3f} км/ч; '
+                      'Потрачено ккал: {calories:.3f}.')
 
     def get_message(self) -> str:
         return self.OUTPUT_MESSAGE.format(**asdict(self))
@@ -23,7 +23,7 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки."""
-    
+
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
     H_IN_M: int = 60
@@ -126,8 +126,8 @@ class Swimming(Training):
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
     activity_types: Dict[str, Type[Training]] = {'SWM': Swimming,
-                                                'RUN': Running,
-                                                'WLK': SportsWalking}
+                                                 'RUN': Running,
+                                                 'WLK': SportsWalking}
 
     try:
         sport_res = activity_types[workout_type](*data)
